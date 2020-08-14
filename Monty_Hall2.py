@@ -1,57 +1,58 @@
 import random
 
 
-def stay_switch(choice, opt):
-    Goat = goat(choice, opt)
-    print(f"Door {Goat + 1} is a Goat.\nWould you like to change doors? (y/n)")
-    ss = input("Enter Here: ")
-    if ss == "y" and opt[choice] != "Car":
-        print("You Won a Car!")
-    elif ss == "y" and opt[choice] == "Car":
-        print("You Won a Goat!")
-    elif ss == "n" and opt[choice] == "Car":
-        print("You Won a Car!")
-    elif ss == "n" and opt[choice] == "Car":
-        print("You Wont a Goat!")
+def question(opt, message):
+    invalid = ["Ugh. That wasn't an option.", "Oops, something went wrong :(", "Sorry, can't do that ̄ \_(ツ)_/̄ ", "Please enter a valid option."]
+    while True:
+        print(message)
+        choice = input("Enter Here: ")
+        if choice in opt:
+            return choice
+        print(random.choice(invalid))
 
 
-def goat(choice, opt):
-    for i in range(len(opt)):
-        if i != choice and opt[i] == "Goat":
-            Goat = i
-            del opt[i]
+def find_goat(choice, doors):
+    for i in range(len(doors)):
+        if i != choice and doors[i] == "Goat":
+            return i
+
+
+def stay_switch(choice, doors):
+    goat = find_goat(choice, doors)
+    opt = ["y", "n"]
+    switch = question(opt, f"Door {goat + 1} is a Goat.\nWould you like to change doors? y/n")
+    for i in range(len(doors)):
+        if i != goat and i != choice:
+            not_selected = i
             break
-    return Goat
+    if switch == "y":
+        return not_selected
+    else:
+        return choice
 
 
 def randomizing_door_options():
-    opt = ["Car", "Goat", "Goat"]
-    random.shuffle(opt)
-    return opt
+    doors = ["Car", "Goat", "Goat"]
+    random.shuffle(doors)
+    return doors
 
 
 def main():
-    opt = randomizing_door_options()
-    while True:
-        try:
-            choice = int(input("Guess Which Door has the Car:\n1)Door 1\n2)Door 2\n3)Door 3\nEnter Here: ")) - 1
-            if choice in range(len(opt)):
-                stay_switch(choice, opt)
-                break
-            else:
-                raise ValueError
-        except ValueError:
-            print("Oops! That door doesn't exist. Choose Again")
+    doors = randomizing_door_options()
+    opt = ["1", "2", "3"]
+    choice = int(question(opt, "Guess Which Door has the Car:\n1)Door 1\n2)Door 2\n3)Door 3")) - 1
+    final_answer = stay_switch(choice, doors)
+    if doors[final_answer] == "Car":
+        print("Win")
+    else:
+        print("Lose")
+    print(doors)
 
 
 if __name__ == "__main__":
-    sim_or_play = int(input("Options:\n1)Play\n2)Quit\nEnter Here: "))
-    try:
-        if sim_or_play == 1:
-            main()
-        elif sim_or_play == 2:
-            print("Goodbye")
-        else:
-            raise ValueError
-    except ValueError:
-        print("invalid option")
+    opt = ["1", "2"]
+    choice = int(question(opt, "Options:\n1)Play\n2)Quit"))
+    if choice == 1:
+        main()
+    elif choice == 2:
+        print("Goodbye")
