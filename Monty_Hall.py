@@ -27,7 +27,7 @@ def randomizing_door_options():
     return opt
 
 
-def cpu_sim():
+def main():
     stay, switch = 0, 0
     reps = 1000
     for _ in range(reps):
@@ -40,21 +40,7 @@ def cpu_sim():
         elif winner == "switch":
             switch += 1
     print("Stay:", stay, "wins\nSwitch:", switch, "wins")
-    
 
-def main():
-    cpu_sim()
-"""    sim_or_play = int(input("Options:\n1)Play\n2)Cpu Simulation\nEnter Here: "))
-    try:
-        if sim_or_play == 1:
-            player()
-        elif sim_or_play == 2:
-            cpu_sim()
-        else:
-            raise ValueError
-    except ValueError:
-        print("invalid option")
-"""    
 
 if __name__ == "__main__":
     main()
